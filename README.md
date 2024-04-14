@@ -1,0 +1,2 @@
+# bideey
+bidding platform template
