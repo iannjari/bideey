@@ -15,6 +15,14 @@ type Biddable struct {
 
 type BiddableCategory int
 
+func (b BiddableCategory) GetIndex() int {
+	return int(b)
+}
+
+func (b BiddableCategory) Equals(other BiddableCategory) bool {
+	return int(b) == int(other)
+}
+
 const (
 	OTHER BiddableCategory = iota
 	ART
