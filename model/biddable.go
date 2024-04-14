@@ -3,6 +3,7 @@ package model
 import "bideey/auth"
 
 type Biddable struct {
+	Code        string
 	GuidePrice  int
 	Name        string
 	Description string
@@ -12,5 +13,12 @@ type Biddable struct {
 	Category    BiddableCategory
 }
 
-type BiddableCategory struct {
-}
+type BiddableCategory int
+
+const (
+	OTHER BiddableCategory = iota
+	ART
+	SACCO
+	HOUSEHOLLD
+	PET
+)
