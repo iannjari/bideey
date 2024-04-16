@@ -1,6 +1,8 @@
 package model
 
-import "bideey/auth"
+import (
+	"bideey/auth"
+)
 
 type Biddable struct {
 	Code        string
