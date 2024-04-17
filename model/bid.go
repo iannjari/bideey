@@ -1,9 +1,15 @@
 package model
 
-import "bideey/auth"
+import (
+	"bideey/auth"
+
+	"github.com/google/uuid"
+)
 
 type Bid struct {
-	Code   string
-	Amount string
-	Owner  auth.User
+	Id         uuid.UUID
+	Code       string
+	Amount     int
+	Owner      auth.User
+	BiddableId uuid.UUID
 }

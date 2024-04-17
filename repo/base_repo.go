@@ -9,7 +9,7 @@ import (
 )
 
 type AbstractRepository interface {
-	Save(entity interface{}) (interface{}, error)
+	Save(entity any) (*any, error)
 	GetById(id *uuid.UUID) (interface{}, error)
 	Delete(id uuid.UUID) (err error)
 	Update(entity interface{})
@@ -27,7 +27,7 @@ func NewRepository() *Repository {
 	return &Repository{}
 }
 
-func (*Repository) Save(entity interface{}) (*interface{}, error) {
+func (*Repository) Save(entity any) (*any, error) {
 
 	var err error
 
@@ -37,7 +37,7 @@ func (*Repository) Save(entity interface{}) (*interface{}, error) {
 
 	if err != nil {
 		tx.Rollback()
-		return &entity, fmt.Errorf("could not create entity. error: " + err.Error())
+		return nil, fmt.Errorf("could not create entity. error: " + err.Error())
 	}
 	tx.Commit()
 	return &entity, nil
