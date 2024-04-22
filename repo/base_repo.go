@@ -8,26 +8,25 @@ import (
 	"gorm.io/gorm"
 )
 
-type AbstractRepository interface {
-	Save(entity interface{}) (interface{}, error)
-	GetById(id *uuid.UUID) (interface{}, error)
-	Delete(id uuid.UUID) (err error)
-	Update(entity interface{})
+type AbstractRepository[T any] interface {
+	Save(entity *T) (*T, error)
+	GetById(id *uuid.UUID) (*T, error)
+	Delete(id *uuid.UUID) (err error)
 	// TODO: have a query/pagination impl
-	Query() (*[]interface{}, error)
+	Query() (*[]T, error)
 }
 
-type Repository struct {
+type Repository[T any] struct {
 }
 
 var db *gorm.DB
 
-func NewRepository() *Repository {
+func NewRepository[T any]() *Repository[T] {
 	db = config.Database
-	return &Repository{}
+	return &Repository[T]{}
 }
 
-func (*Repository) Save(entity interface{}) (*interface{}, error) {
+func (*Repository[T]) Save(entity *T) (*T, error) {
 
 	var err error
 
@@ -37,25 +36,25 @@ func (*Repository) Save(entity interface{}) (*interface{}, error) {
 
 	if err != nil {
 		tx.Rollback()
-		return &entity, fmt.Errorf("could not create entity. error: " + err.Error())
+		return nil, fmt.Errorf("could not create entity. error: " + err.Error())
 	}
 	tx.Commit()
-	return &entity, nil
+	return entity, nil
 }
 
-func (*Repository) GetById(id *uuid.UUID) (entity *interface{}, error error) {
-	db.First(&entity, id.String)
+func (*Repository[T]) GetById(id *uuid.UUID) (entity *T, error error) {
+	db.Where("id = ?", id).First(&entity)
 	return
 }
 
-func (*Repository) Delete(id uuid.UUID) (err error) {
-	var entity interface{}
-	db.Delete(&entity)
+func (*Repository[T]) Delete(id *uuid.UUID) (err error) {
+	var entity T
+	db.Where("id = ?", id).Delete(&entity)
 	return
 }
 
 // TODO: have a query/pagination impl
-func (*Repository) Query() (entity *interface{}, err error) {
-	db.Find(&entity)
+func (*Repository[T]) Query() (entities *[]T, err error) {
+	db.Find(&entities)
 	return
 }

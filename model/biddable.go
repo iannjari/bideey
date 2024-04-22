@@ -1,18 +1,23 @@
 package model
 
 import (
-	"bideey/auth"
+	// "bideey/auth"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type Biddable struct {
+	ID          uuid.UUID
 	Code        string
 	GuidePrice  int
 	Name        string
 	Description string
 	HighestBid  int
 	Bids        []Bid
-	Owner       auth.User
-	Category    BiddableCategory
+	// Owner       auth.User
+	Category BiddableCategory
+	gorm.Model
 }
 
 type BiddableCategory int
