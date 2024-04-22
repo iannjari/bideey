@@ -9,23 +9,28 @@ import (
 	"github.com/google/uuid"
 )
 
+type Service interface {
+	CreateBid(bid *model.Bid) (entity *model.Bid, err error)
+	UpdateBid(bid *model.Bid) (entity *model.Bid, err error)
+}
+
 type BidsService struct {
 }
 
-var repository *repo.Repository
+var repository *repo.Repository[model.Bid]
 
 func NewBidsService() *BidsService {
-	repository = repo.NewRepository()
+	repository = repo.NewRepository[model.Bid]()
 	return &BidsService{}
 }
 
-func CreateBid(bid *model.Bid) (entity *model.Bid, err error) {
+func (*BidsService) CreateBid(bid *model.Bid) (entity *model.Bid, err error) {
 
 	if err := validate(bid); err != nil {
 		return nil, err
 	}
 
-	if biddable, err := repository.GetById(&bid.BiddableId); err != nil {
+	if biddable, err := repository.GetById(&bid.BiddableID); err != nil {
 		return nil, err
 	} else if biddable == nil {
 		return nil, errors.New("did not find biddable with id provided")
@@ -42,24 +47,15 @@ func CreateBid(bid *model.Bid) (entity *model.Bid, err error) {
 	if err != nil {
 		return
 	}
-
-	savedBid := *result
-
-	bidCast, ok := savedBid.(model.Bid)
-
-	if ok {
-		return &bidCast, nil
-	} else {
-		return nil, errors.New("casting error")
-	}
+	return result, nil
 }
 
-func UpdateBid(bid *model.Bid) (entity *model.Bid, err error) {
+func (*BidsService) UpdateBid(bid *model.Bid) (entity *model.Bid, err error) {
 	if err := validate(bid); err != nil {
 		return nil, err
 	}
 
-	if biddable, err := repository.GetById(&bid.BiddableId); err != nil {
+	if biddable, err := repository.GetById(&bid.BiddableID); err != nil {
 		return nil, err
 	} else if biddable == nil {
 		return nil, errors.New("did not find bididdable with id provided")
@@ -74,32 +70,15 @@ func UpdateBid(bid *model.Bid) (entity *model.Bid, err error) {
 		return nil, errors.New("did not find bid with id provided")
 	}
 
-	dbBid := *result
+	result.Amount = bid.Amount
 
-	// only update amount
-	bidCast, ok := dbBid.(model.Bid)
-
-	if !ok {
-		return nil, errors.New("casting error")
-	}
-
-	bidCast.Amount = bid.Amount
-
-	result, err = repository.Save(bidCast)
+	result, err = repository.Save(result)
 
 	if err != nil {
 		return
 	}
 
-	savedBid := *result
-
-	castedBid, ok := savedBid.(model.Bid)
-
-	if ok {
-		return &castedBid, nil
-	} else {
-		return nil, errors.New("casting error")
-	}
+	return result, nil
 }
 
 func validate(bid *model.Bid) error {
@@ -113,7 +92,7 @@ func validate(bid *model.Bid) error {
 		return errors.New("bid amount cannot be 0 or below")
 	}
 
-	if bid.BiddableId == uuid.Nil {
+	if bid.BiddableID == uuid.Nil {
 		return errors.New("bidabble id cannot be nil")
 	}
 

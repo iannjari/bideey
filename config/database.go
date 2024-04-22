@@ -1,6 +1,7 @@
 package config
 
 import (
+	"bideey/model"
 	"fmt"
 	"log"
 
@@ -29,6 +30,7 @@ func ConfigureDb(host string, port int, user string, password string, dbname str
 	fmt.Println("✅ Successfully configured DB.")
 
 	Database = db
-	// db.AutoMigrate(&{})
+	db.AutoMigrate(&model.Bid{})
+	db.AutoMigrate(&model.Biddable{})
 	return
 }

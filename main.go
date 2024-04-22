@@ -27,7 +27,7 @@ func main() {
 		os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"))
 
 	if db != nil {
-		server := api.NewServer(8000)
+		server := api.NewServer(os.Getenv("SERVER_HOST"))
 		server.Run()
 
 	} else {

@@ -1,37 +1,37 @@
 package api
 
 import (
+	"bideey/handler"
 	"bideey/util"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 )
 
 type Server struct {
-	address int
+	address string
 }
 
 func (s *Server) Run() error {
 	router := http.NewServeMux()
 
 	router.HandleFunc("GET /hello", sayHello())
-
-	addr := ":" + fmt.Sprint(s.address)
+	router.HandleFunc("POST /bid", handler.CreateBid())
+	router.HandleFunc("PUT /bid", handler.UpdateBid())
 
 	server := http.Server{
-		Addr:    addr,
+		Addr:    s.address,
 		Handler: router,
 	}
 
-	log.Println("Server started, listening on port:", s.address)
+	log.Println("Server started, listening on:", s.address)
 
 	return server.ListenAndServe()
 }
 
-func NewServer(address int) (server *Server) {
+func NewServer(hostAdress string) (server *Server) {
 	server = &Server{
-		address: address,
+		address: hostAdress,
 	}
 	return
 }
