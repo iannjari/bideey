@@ -5,6 +5,7 @@ import (
 	"bideey/repo"
 	"bideey/util"
 	"errors"
+	"fmt"
 
 	"github.com/google/uuid"
 )
@@ -29,6 +30,8 @@ func (*BidsService) CreateBid(bid *model.Bid) (entity *model.Bid, err error) {
 	if err := validate(bid); err != nil {
 		return nil, err
 	}
+
+	fmt.Println(*bid)
 
 	if biddable, err := repository.GetById(&bid.BiddableID); err != nil {
 		return nil, err
