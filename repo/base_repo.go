@@ -3,6 +3,7 @@ package repo
 import (
 	"bideey/config"
 	"fmt"
+	"log"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -22,7 +23,10 @@ type Repository[T any] struct {
 var db *gorm.DB
 
 func NewRepository[T any]() *Repository[T] {
-	db = config.Database
+	log.Println(".....................")
+	sqlDB := config.NewPostgresDB()
+	db = sqlDB.Database
+	log.Println(db)
 	return &Repository[T]{}
 }
 
@@ -43,8 +47,11 @@ func (*Repository[T]) Save(entity *T) (*T, error) {
 }
 
 func (*Repository[T]) GetById(id *uuid.UUID) (entity *T, error error) {
-	db.Where("id = ?", id).First(&entity)
-	return
+	var value T
+	if result := db.Where("id = ?", id).First(&value); result.Error != nil {
+		return
+	}
+	return &value, nil
 }
 
 func (*Repository[T]) Delete(id *uuid.UUID) (err error) {
