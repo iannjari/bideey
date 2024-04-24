@@ -84,6 +84,14 @@ func (*BidsService) UpdateBid(bid *model.Bid) (entity *model.Bid, err error) {
 	return result, nil
 }
 
+func DeleteBid(id string) error {
+	uuid, err := uuid.Parse(id)
+	if err != nil {
+		return errors.New("error parsing uuid from str: " + err.Error())
+	}
+	return repository.Delete(&uuid)
+}
+
 func validate(bid *model.Bid) error {
 	if bid == nil {
 

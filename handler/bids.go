@@ -50,3 +50,16 @@ func UpdateBid() http.HandlerFunc {
 		json.NewEncoder(w).Encode(result)
 	}
 }
+
+func DeleteBid() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := r.PathValue("id")
+
+		serviceErr := service.DeleteBid(id)
+
+		if serviceErr != nil {
+			http.Error(w, serviceErr.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+}

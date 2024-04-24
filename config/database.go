@@ -64,6 +64,7 @@ func ConfigureDb(host string, port int, user string, password string, dbname str
 	if err != nil {
 		panic("failed to migrate model.Bid after connecting to database" + err.Error())
 	}
+	err = db.AutoMigrate(&model.Biddable{})
 	if err != nil {
 		panic("failed to migrate model.Biddable after connecting to database" + err.Error())
 	}
