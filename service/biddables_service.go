@@ -13,9 +13,8 @@ import (
 type BService interface {
 	CreateBiddable(b *model.Biddable) (*model.Biddable, error)
 	UpdateBiddable(b *model.Biddable) (*model.Biddable, error)
-	DeleteBiddable(b *model.Biddable) error
 	QueryBiddables() (*[]model.Biddable, error)
-	DeleteBid(id string) error
+	DeleteBiddable(id string) error
 }
 
 type BiddablesService struct {

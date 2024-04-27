@@ -7,19 +7,17 @@ import (
 	"net/http"
 )
 
-var bidsService *service.BidsService = service.NewBidsService()
+var biddablesService *service.BiddablesService = service.NewBidabblesService()
 
-func CreateBid() http.HandlerFunc {
-
+func CreateBiddable() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
-		var bid model.Bid
-		if err := json.NewDecoder(r.Body).Decode(&bid); err != nil {
+		var biddable model.Biddable
+		if err := json.NewDecoder(r.Body).Decode(&biddable); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		result, serviceErr := bidsService.CreateBid(&bid)
+		result, serviceErr := biddablesService.CreateBiddable(&biddable)
 
 		if serviceErr != nil {
 			http.Error(w, serviceErr.Error(), http.StatusInternalServerError)
@@ -30,17 +28,17 @@ func CreateBid() http.HandlerFunc {
 	}
 }
 
-func UpdateBid() http.HandlerFunc {
+func UpdateBiddable() http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		var bid model.Bid
-		if err := json.NewDecoder(r.Body).Decode(&bid); err != nil {
+		var biddable model.Biddable
+		if err := json.NewDecoder(r.Body).Decode(&biddable); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		result, serviceErr := bidsService.UpdateBid(&bid)
+		result, serviceErr := biddablesService.UpdateBiddable(&biddable)
 
 		if serviceErr != nil {
 			http.Error(w, serviceErr.Error(), http.StatusInternalServerError)
@@ -51,11 +49,11 @@ func UpdateBid() http.HandlerFunc {
 	}
 }
 
-func DeleteBid() http.HandlerFunc {
+func DeleteBiddable() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := r.PathValue("id")
 
-		serviceErr := bidsService.DeleteBid(id)
+		serviceErr := biddablesService.DeleteBiddable(id)
 
 		if serviceErr != nil {
 			http.Error(w, serviceErr.Error(), http.StatusInternalServerError)
