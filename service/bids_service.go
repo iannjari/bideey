@@ -13,6 +13,8 @@ import (
 type Service interface {
 	CreateBid(bid *model.Bid) (entity *model.Bid, err error)
 	UpdateBid(bid *model.Bid) (entity *model.Bid, err error)
+	DeleteBid(id string) error
+	QueryBids() (*[]model.Biddable, error)
 }
 
 type BidsService struct {
@@ -84,12 +86,16 @@ func (*BidsService) UpdateBid(bid *model.Bid) (entity *model.Bid, err error) {
 	return result, nil
 }
 
-func DeleteBid(id string) error {
+func (*BidsService) DeleteBid(id string) error {
 	uuid, err := uuid.Parse(id)
 	if err != nil {
 		return errors.New("error parsing uuid from str: " + err.Error())
 	}
 	return repository.Delete(&uuid)
+}
+
+func (*BidsService) QueryBids() (*[]model.Bid, error) {
+	return repository.Query()
 }
 
 func validate(bid *model.Bid) error {
