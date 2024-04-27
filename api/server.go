@@ -16,7 +16,7 @@ func (s *Server) Run() error {
 
 	// hello
 	router.HandleFunc("GET /hello", sayHello())
-	router.HandleFunc("GET ", sayHello())
+	router.HandleFunc("GET /", sayHello())
 
 	// bids controllers
 	router.HandleFunc("POST /bid", handler.CreateBid())

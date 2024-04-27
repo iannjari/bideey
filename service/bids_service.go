@@ -77,7 +77,7 @@ func (*BidsService) UpdateBid(bid *model.Bid) (entity *model.Bid, err error) {
 
 	result.Amount = bid.Amount
 
-	result, err = repository.Save(result)
+	result, err = repository.Update(result)
 
 	if err != nil {
 		return

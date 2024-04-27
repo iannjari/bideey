@@ -64,7 +64,7 @@ func (*BiddablesService) UpdateBiddable(b *model.Biddable) (entity *model.Biddab
 
 	result.GuidePrice = b.GuidePrice
 
-	result, err = this_repository.Save(result)
+	result, err = this_repository.Update(result)
 
 	if err != nil {
 		return
@@ -93,7 +93,7 @@ func validateBiddable(biddable *model.Biddable) error {
 	}
 
 	if biddable.GuidePrice <= 0 {
-		return errors.New("bid quide price amount cannot be 0 or below")
+		return errors.New("bid guide price amount cannot be 0 or below")
 	}
 
 	if biddable.Description == "" {

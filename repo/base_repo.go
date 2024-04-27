@@ -10,6 +10,7 @@ import (
 
 type AbstractRepository[T any] interface {
 	Save(entity *T) (*T, error)
+	Update(entity *T) (*T, error)
 	GetById(id *uuid.UUID) (*T, error)
 	Delete(id *uuid.UUID) (err error)
 	// TODO: have a query/pagination impl
@@ -34,6 +35,22 @@ func (*Repository[T]) Save(entity *T) (*T, error) {
 	tx := db.Begin()
 
 	err = db.Create(&entity).Error
+
+	if err != nil {
+		tx.Rollback()
+		return nil, fmt.Errorf("could not create entity. error: " + err.Error())
+	}
+	tx.Commit()
+	return entity, nil
+}
+
+func (*Repository[T]) Update(entity *T) (*T, error) {
+
+	var err error
+
+	tx := db.Begin()
+
+	err = db.Save(&entity).Error
 
 	if err != nil {
 		tx.Rollback()
