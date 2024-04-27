@@ -10,13 +10,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type Service interface {
-	CreateBid(bid *model.Bid) (entity *model.Bid, err error)
-	UpdateBid(bid *model.Bid) (entity *model.Bid, err error)
-	DeleteBid(id string) error
-	QueryBids() (*[]model.Biddable, error)
-}
-
 type BidsService struct {
 }
 

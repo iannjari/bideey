@@ -10,13 +10,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type BService interface {
-	CreateBiddable(b *model.Biddable) (*model.Biddable, error)
-	UpdateBiddable(b *model.Biddable) (*model.Biddable, error)
-	QueryBiddables() (*[]model.Biddable, error)
-	DeleteBiddable(id string) error
-}
-
 type BiddablesService struct {
 }
 
