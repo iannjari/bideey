@@ -18,6 +18,7 @@ func (s *Server) Run() error {
 	router.HandleFunc("GET /hello", sayHello())
 	router.HandleFunc("POST /bid", handler.CreateBid())
 	router.HandleFunc("PUT /bid", handler.UpdateBid())
+	router.HandleFunc("DELETE /bid/{id}", handler.DeleteBid())
 
 	server := http.Server{
 		Addr:    s.address,

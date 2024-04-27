@@ -3,7 +3,6 @@ package repo
 import (
 	"bideey/config"
 	"fmt"
-	"log"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -23,10 +22,8 @@ type Repository[T any] struct {
 var db *gorm.DB
 
 func NewRepository[T any]() *Repository[T] {
-	log.Println(".....................")
 	sqlDB := config.NewPostgresDB()
 	db = sqlDB.Database
-	log.Println(db)
 	return &Repository[T]{}
 }
 
