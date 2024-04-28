@@ -14,9 +14,11 @@ type BidsService struct {
 }
 
 var repository *repo.Repository[model.Bid]
+var biddableRepo *repo.Repository[model.Biddable]
 
 func NewBidsService() *BidsService {
 	repository = repo.NewRepository[model.Bid]()
+	biddableRepo = repo.NewRepository[model.Biddable]()
 	return &BidsService{}
 }
 
@@ -28,7 +30,7 @@ func (*BidsService) CreateBid(bid *model.Bid) (entity *model.Bid, err error) {
 
 	fmt.Println(*bid)
 
-	if biddable, err := repository.GetById(&bid.BiddableID); err != nil {
+	if biddable, err := biddableRepo.GetById(&bid.BiddableID); err != nil {
 		return nil, err
 	} else if biddable == nil {
 		return nil, errors.New("did not find biddable with id provided")
@@ -45,6 +47,22 @@ func (*BidsService) CreateBid(bid *model.Bid) (entity *model.Bid, err error) {
 	if err != nil {
 		return
 	}
+	return result, nil
+}
+
+func (*BidsService) GetBidById(id string) (*model.Bid, error) {
+	uuid, err := uuid.Parse(id)
+	if err != nil {
+		return nil, errors.New("error parsing uuid from str: " + err.Error())
+	}
+	result, err := repository.GetById(&uuid)
+
+	if err != nil {
+		return nil, err
+	} else if result == nil {
+		return nil, errors.New("did not find bid with id provided")
+	}
+
 	return result, nil
 }
 

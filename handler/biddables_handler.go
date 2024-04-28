@@ -49,6 +49,36 @@ func UpdateBiddable() http.HandlerFunc {
 	}
 }
 
+func QueryBiddables() http.HandlerFunc {
+
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		results, serviceErr := biddablesService.QueryBiddables()
+
+		if serviceErr != nil {
+			http.Error(w, serviceErr.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		json.NewEncoder(w).Encode(results)
+	}
+}
+
+func FetchBiddable() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := r.PathValue("id")
+
+		biddable, serviceErr := biddablesService.GetBiddableById(id)
+
+		if serviceErr != nil {
+			http.Error(w, serviceErr.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		json.NewEncoder(w).Encode(biddable)
+	}
+}
+
 func DeleteBiddable() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := r.PathValue("id")

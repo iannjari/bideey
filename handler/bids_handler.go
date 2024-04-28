@@ -51,6 +51,21 @@ func UpdateBid() http.HandlerFunc {
 	}
 }
 
+func QueryBids() http.HandlerFunc {
+
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		results, serviceErr := bidsService.QueryBids()
+
+		if serviceErr != nil {
+			http.Error(w, serviceErr.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		json.NewEncoder(w).Encode(results)
+	}
+}
+
 func DeleteBid() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := r.PathValue("id")
@@ -61,5 +76,20 @@ func DeleteBid() http.HandlerFunc {
 			http.Error(w, serviceErr.Error(), http.StatusInternalServerError)
 			return
 		}
+	}
+}
+
+func FetchBid() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := r.PathValue("id")
+
+		bid, serviceErr := bidsService.GetBidById(id)
+
+		if serviceErr != nil {
+			http.Error(w, serviceErr.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		json.NewEncoder(w).Encode(bid)
 	}
 }

@@ -41,6 +41,22 @@ func (*BiddablesService) CreateBiddable(b *model.Biddable) (entity *model.Biddab
 	return result, nil
 }
 
+func (*BiddablesService) GetBiddableById(id string) (*model.Biddable, error) {
+	uuid, err := uuid.Parse(id)
+	if err != nil {
+		return nil, errors.New("error parsing uuid from str: " + err.Error())
+	}
+	result, err := this_repository.GetById(&uuid)
+
+	if err != nil {
+		return nil, err
+	} else if result == nil {
+		return nil, errors.New("did not find biddable with id provided")
+	}
+
+	return result, nil
+}
+
 func (*BiddablesService) UpdateBiddable(b *model.Biddable) (entity *model.Biddable, err error) {
 	if err := validateBiddable(b); err != nil {
 		return nil, err

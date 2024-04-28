@@ -21,11 +21,15 @@ func (s *Server) Run() error {
 	// bids controllers
 	router.HandleFunc("POST /bid", handler.CreateBid())
 	router.HandleFunc("PUT /bid", handler.UpdateBid())
+	router.HandleFunc("GET /bid", handler.QueryBids())
+	router.HandleFunc("GET /bid/{id}", handler.FetchBid())
 	router.HandleFunc("DELETE /bid/{id}", handler.DeleteBid())
 
 	// biddables controllers
 	router.HandleFunc("POST /biddable", handler.CreateBiddable())
 	router.HandleFunc("PUT /biddable", handler.UpdateBiddable())
+	router.HandleFunc("GET /biddable", handler.QueryBiddables())
+	router.HandleFunc("GET /biddable/{id}", handler.FetchBiddable())
 	router.HandleFunc("DELETE /biddable/{id}", handler.DeleteBiddable())
 
 	server := http.Server{
@@ -33,7 +37,7 @@ func (s *Server) Run() error {
 		Handler: router,
 	}
 
-	log.Println("Server started, listening on:", s.address)
+	log.Println("Server starting, listening on:", s.address)
 
 	return server.ListenAndServe()
 }
